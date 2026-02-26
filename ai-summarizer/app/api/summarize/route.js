@@ -8,14 +8,12 @@ export async function POST(request) {
   try {
     const { url } = await request.json();
 
-    // 1. Scraping Web (Menggantikan fungsi Python requests & BeautifulSoup)
     const response = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0' }
     });
     const html = await response.text();
     const $ = cheerio.load(html);
-    
-    // Ambil semua teks dalam tag <p>
+ 
     let textContent = '';
     $('p').each((i, el) => {
       textContent += $(el).text() + ' ';
@@ -24,8 +22,6 @@ export async function POST(request) {
     if (!textContent.trim()) {
       return NextResponse.json({ error: "Teks tidak ditemukan di link tersebut." }, { status: 400 });
     }
-
-    // 2. Proses AI dengan Gemini
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const prompt = `
       Kamu adalah asisten analis data ahli.
@@ -34,7 +30,6 @@ export async function POST(request) {
       
       Teks Artikel: ${textContent.substring(0, 10000)}
     `;
-
     const aiResult = await model.generateContent(prompt);
     const summary = aiResult.response.text();
 
