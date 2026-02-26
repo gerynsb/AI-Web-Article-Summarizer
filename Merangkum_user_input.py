@@ -56,8 +56,9 @@ def rangkum_dengan_ai(teks):
     except Exception as e:
         return f"Terjadi kesalahan pada AI: {e}"
     
-
+print("\n \n \n================================================")
 print('Selamat datang di AI perangkum Artikel!')
+print("================================================")
 
 url_target = input('masukkan link web: ')
 
